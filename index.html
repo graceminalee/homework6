@@ -1,0 +1,196 @@
+<!-- 
+    HW6 Starter code
+     Modified from: https://codepen.io/cathydutton/pen/GBcvo
+    -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW6 - JQuery</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script> <!--copied from JQuery browser, jquery adds additional functions to use in code-->
+    <style>
+        .timer-background 
+        {
+            background-color: grey;
+        }
+        .timer-image 
+        {
+            width: 100%;
+            height: auto;
+            position: abosolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+    <script>
+        $(document).ready(function() //window.onload = function () { 
+        {
+            $('p').attr('id', 'timer').addClass('timer-background');
+            var seconds = "00";
+            var tens = "00";
+            var interval; 
+
+            var $appendTens = $('#tens');
+            var $appendSeconds = $('#seconds');
+            var $buttonStart = $('#button-start');
+            var $buttonStop = $('#button-stop');
+            var $buttonReset = $('#button-reset');
+            var $timer = $('#timer');
+            var running = false;
+
+            $timer.addClass('timer-background');
+
+            $buttonStart.addClass('control-button');
+            $buttonStop.addClass('control-button');
+            $buttonReset.addClass('control-button');
+
+            $('.wrapper').wrap(`<div class="timer-wrapper"></div>`);
+
+
+    
+            // Style wrapper and image
+            $('.timer-wrapper').css({
+                'background-image': 'url("https://clipart-library.com/2023/Halloween_Moon_PNG_Clip_Art_Image.png")',
+                'background-size': 'contain',
+                'background-repeat': 'no-repeat',
+                'background-position': 'center',
+                'position': 'relative',
+                'width': '100%',
+                'height': '100vh', 
+                'display': 'flex',
+                'align-items': 'center',
+                'justify-content': 'center'
+            });
+
+            // Style image
+            $('.timer-image').css({
+                'width': '100%',
+                'height': 'auto',
+                'position': 'absolute', 
+                'top': '0',
+                'left': '0',
+                'z-index': '0' // Image to back
+            });
+
+            $('control-button').addClass('control-button');
+
+            $('.control-button').css
+            ({
+                'padding': '10px 20px',
+                'margin': '5px',
+                'font-size': '16px',
+                'background-color': 'rgb(254, 216, 177)',
+                'border-radius': '10px'
+            });
+
+            // Style timer and buttons
+            $('.timer-background').css({
+                'position': 'relative', // Top of the image
+                'z-index': '1', // Front of the image
+                'padding': '20px',
+                'border': '2px solid black',
+                'background-color': 'rgba(255, 255, 255, 0.5)', // Little transparent background
+                'border-radius': '15px', // Round corners
+                'text-align': 'center',
+                'font-family': 'Arial, sans-serif'
+                
+            });
+           
+            $buttonStart.on('click', function() //buttonStart.onclick = function () {
+            {
+                clearInterval(interval);
+                interval = setInterval(startTimer, 10);
+                $timer.css('background-color', 'rgb(144,238,144)');
+                startOpacityAnimation();
+                running = true;
+            });
+
+            $buttonStop.on('click', function() //onclick = function () {
+            { 
+                clearInterval(interval);
+                resetOpacity();
+                running = false;
+                $timer.css('background-color', 'rgb(250, 20, 0)');
+            });
+
+            $buttonReset.on('click', function() //click = function () {
+            { 
+                clearInterval(interval);
+                tens = "00";
+                seconds = "00";
+                $appendTens.html(tens);
+                $appendSeconds.html(seconds);
+                running = false;
+                resetOpacity();
+                $timer.css('background-color', 'rgb(125, 125, 125)');
+            });
+
+            function startTimer() 
+            {
+                tens++;
+
+                if (tens < 9) {
+                    $appendTens.html("0", tens);
+                }
+                if (tens > 9) {
+                    $appendTens.html(tens);
+
+                }
+                if (tens > 99) 
+                {
+                    console.log("seconds");
+                    seconds++;
+                    $appendSeconds.html(seconds < 10 ? "0" + seconds : seconds); // second
+                    tens = 0;
+                    $appendTens.html("00");
+                }
+                if (seconds > 9) 
+                {
+                    $appendSeconds.html(seconds);
+                }
+            }
+
+            // Step 7
+            function startOpacityAnimation()
+            {
+                opacity = 1.0;
+                opacityInterval = setInterval(function()
+                {
+                    if (opacity >= 1 && running === true)
+                    {
+                        opacity = 0.8;
+                    }
+                    else 
+                    {
+                        opacity += 0.4;
+                    }
+                    $timer.css('opacity', opacity);
+                }, 375);
+            }
+
+            
+            function resetOpacity() 
+            {
+                $timer.css('opacity', 1.0);
+                opacity = 1.0;
+            }
+
+
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1>JQuery Stopwatch</h1>
+        <p><span id="seconds">00</span>:<span id="tens">00</span></p>
+        <button id="button-start">Start</button>
+        <button id="button-stop">Stop</button>
+        <button id="button-reset">Reset</button>
+    </div>
+</body>
+
+</html>
